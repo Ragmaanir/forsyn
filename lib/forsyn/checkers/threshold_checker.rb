@@ -2,21 +2,25 @@ module Forsyn
   module Checkers
     class ThresholdChecker < Checker
 
-      attr_accessor :alert_threshold, :warn_threshold
+      include AlertState::States
 
-      def initialize(name, options)
+      attr_accessor :critical_threshold, :abnormal_threshold, :notable_threshold
+
+      def initialize(name, critical: , abnormal: , notable: nil)
         super(name)
-        @alert_threshold, @warn_threshold = options.values_at(:alert, :warn)
-        raise ArgumentError unless alert_threshold.is_a?(Fixnum)
+        @critical_threshold, @abnormal_threshold, @notable_threshold = critical, abnormal, notable
+        #raise ArgumentError unless critical_threshold.is_a?(Fixnum)
       end
 
       def check(sample)
-        if sample.value > alert_threshold
-          notify_responders(:alert, sample, alert_threshold)
-        elsif warn_threshold && sample.value > warn_threshold
-          notify_responders(:warn, sample, warn_threshold)
+        if sample.value > critical_threshold
+          notify_responders(CRITICAL, sample, critical_threshold)
+        elsif abnormal_threshold && sample.value > abnormal_threshold
+          notify_responders(ABNORMAL, sample, abnormal_threshold)
+        elsif notable_threshold && sample.value > notable_threshold
+          notify_responders(NOTABLE, sample, notable_threshold)
         else
-          notify_responders(:normal, sample, nil)
+          notify_responders(NORMAL, sample, nil)
         end
       end
 

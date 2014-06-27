@@ -1,7 +1,9 @@
 describe Forsyn::Responders::StatefulResponder do
 
   let(:responder) { described_class.new }
-  let(:checker)   { Forsyn::Checkers::ThresholdChecker.new('TestChecker', alert: 10, warn: 5) }
+  let(:checker)   {
+    Forsyn::Checkers::ThresholdChecker.new('TestChecker', critical: 10, abnormal: 5)
+  }
 
   let(:normal_sample)   { Forsyn::Sample.new(Time.now, 2) }
   let(:warn_sample)     { Forsyn::Sample.new(Time.now, 6) }
@@ -17,7 +19,7 @@ describe Forsyn::Responders::StatefulResponder do
 
     checker.check(critical_sample)
 
-    expect(responder.current_level).to eq(:alert)
+    expect(responder.current_level).to eq(Forsyn::AlertState::States::CRITICAL)
   end
 
   it 'stays in worst state for cooldown-time' do
@@ -25,18 +27,18 @@ describe Forsyn::Responders::StatefulResponder do
 
     checker.check(normal_sample)
 
-    expect(responder.current_level).to eq(:normal)
+    expect(responder.current_level).to eq(Forsyn::AlertState::States::NORMAL)
 
     checker.check(warn_sample)
 
-    expect(responder.current_level).to eq(:warn)
+    expect(responder.current_level).to eq(Forsyn::AlertState::States::ABNORMAL)
 
     checker.check(critical_sample)
 
-    expect(responder.current_level).to eq(:alert)
+    expect(responder.current_level).to eq(Forsyn::AlertState::States::CRITICAL)
 
     checker.check(normal_sample)
 
-    expect(responder.current_level).to eq(:alert)
+    expect(responder.current_level).to eq(Forsyn::AlertState::States::CRITICAL)
   end
 end

@@ -18,26 +18,13 @@ module Forsyn
         @history.add_state(data[:sample].timestamp, level)
 
         relevant_states = @history.states_since(cooldown.ago)
+        worst_state     = AlertState.worst(relevant_states)
 
-        worst_state = relevant_states.inject(level){ |prev, cur| worst_state(prev, cur) }
-
-        change = classify_change(current_level, worst_state)
-
-        if change != :no_change
-          notify_notifiers(checker, change, data)
+        if current_level != worst_state
+          notify_notifiers(checker, [current_level, worst_state], data)
         end
 
         @current_level = worst_state
-      end
-
-      def worst_state(a, b)
-        states = [nil, :normal, :warn, :alert]
-        a_idx = states.index(a)
-        b_idx = states.index(b)
-
-        worst_idx = [a_idx, b_idx].max
-
-        states[worst_idx]
       end
 
     end#StatefulResponder

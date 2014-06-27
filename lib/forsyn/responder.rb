@@ -29,24 +29,5 @@ module Forsyn
       notifiers.each{ |n| n.notify(self, alert_state, data) }
     end
 
-  private
-
-    def classify_change(current_level, new_level)
-      case [current_level, new_level]
-        when [:normal,:warn   ] then :warn
-        when [:warn,  :alert  ] then :alert
-        when [:normal,:alert  ] then :immediate_alert
-
-        when [:alert, :warn   ] then :retract_alert
-        when [:warn,  :normal ] then :retract_warning
-        when [:alert, :normal ] then :retract_alert
-
-        when [nil, :alert] then :alert
-        when [nil, :warn ] then :warn
-
-        else :no_change
-      end
-    end
-
   end#Responder
 end
