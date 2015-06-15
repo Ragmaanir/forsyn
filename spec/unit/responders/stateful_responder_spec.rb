@@ -1,8 +1,10 @@
 describe Forsyn::Responders::StatefulResponder do
 
+  States = Forsyn::AlertState::States
+
   let(:responder) { described_class.new }
-  let(:checker)   {
-    Forsyn::Checkers::ThresholdChecker.new('TestChecker', critical: 10, abnormal: 5)
+  let(:trigger)   {
+    Forsyn::Triggers::ThresholdTrigger.new('Test', critical: 10, abnormal: 5)
   }
 
   let(:normal_sample)   { Forsyn::Sample.new(Time.now, 2) }
@@ -10,35 +12,40 @@ describe Forsyn::Responders::StatefulResponder do
   let(:critical_sample) { Forsyn::Sample.new(Time.now, 11) }
 
   it 'can be connected to checkers' do
-    responder.input_from(checker)
-    expect(responder.checkers).to include(checker)
+    responder.input_from(trigger)
+    assert { trigger.in?(responder.inputs) }
   end
 
   it 'detects :alert state immediately' do
-    responder.input_from(checker)
+    responder.input_from(trigger)
 
-    checker.check(critical_sample)
+    trigger.check(critical_sample)
 
-    expect(responder.current_level).to eq(Forsyn::AlertState::States::CRITICAL)
+    assert { responder.current_level == States::CRITICAL }
   end
 
   it 'stays in worst state for cooldown-time' do
-    responder.input_from(checker)
+    responder.input_from(trigger)
 
-    checker.check(normal_sample)
+    trigger.check(normal_sample)
 
-    expect(responder.current_level).to eq(Forsyn::AlertState::States::NORMAL)
+    assert { responder.current_level == States::NORMAL }
 
-    checker.check(warn_sample)
+    trigger.check(warn_sample)
 
-    expect(responder.current_level).to eq(Forsyn::AlertState::States::ABNORMAL)
+    assert { responder.current_level == States::ABNORMAL }
 
-    checker.check(critical_sample)
+    trigger.check(critical_sample)
 
-    expect(responder.current_level).to eq(Forsyn::AlertState::States::CRITICAL)
+    assert { responder.current_level == States::CRITICAL }
 
-    checker.check(normal_sample)
+    trigger.check(normal_sample)
 
-    expect(responder.current_level).to eq(Forsyn::AlertState::States::CRITICAL)
+    assert { responder.current_level == States::CRITICAL }
+
+    Timecop.freeze(responder.cooldown.from_now) do
+      trigger.check(Forsyn::Sample.new(Time.now, 2))
+      assert { responder.current_level == States::NORMAL }
+    end
   end
 end

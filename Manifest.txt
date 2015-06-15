@@ -1,8 +1,0 @@
-.autotest
-History.txt
-Manifest.txt
-README.txt
-Rakefile
-bin/forsyn
-lib/forsyn.rb
-test/test_forsyn.rb

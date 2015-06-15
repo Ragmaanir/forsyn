@@ -1,7 +1,7 @@
 module Forsyn
   class Notifier
 
-    def notify(notification)
+    def notify(*)
 
     end
 

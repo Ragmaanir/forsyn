@@ -3,6 +3,14 @@ module Forsyn
 
     MAILER = Mailer.new('localhost')
 
+    attr_reader :mailer, :from, :to
+
+    def initialize(from:, to:, mailer: MAILER)
+      @mailer = mailer
+      @from = from
+      @to = to
+    end
+
     def notify(notification)
       mailer.send(
         from:       from,
@@ -15,8 +23,8 @@ module Forsyn
 
   private
 
-    def mailer
-      MAILER
+    def email_body_from(notification)
+      notification[:message]
     end
 
   end

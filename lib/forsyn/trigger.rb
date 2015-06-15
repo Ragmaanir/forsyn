@@ -1,5 +1,5 @@
 module Forsyn
-  class Checker
+  class Trigger
 
     attr_accessor :name, :source, :responders
 
@@ -8,7 +8,7 @@ module Forsyn
       @responders = []
     end
 
-    def check(sample)
+    def check(*)
       raise NotImplementedError
     end
 
@@ -19,12 +19,12 @@ module Forsyn
 
   private
 
-    def notify_responders(severity, data)
+    def notify_responders(severity, field, data)
       #raise ArgumentError unless severity.in?()
       if responders.empty?
-        Forsyn.logger.warn("No responders attached to Checker '#{name}'")
+        Forsyn.logger.warn("No responders attached to Trigger '#{name}'")
       end
-      responders.each{ |s| s.receive(self, severity, data) }
+      responders.each{ |s| s.receive(self, severity, field, data) }
     end
 
   end

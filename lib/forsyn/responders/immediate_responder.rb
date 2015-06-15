@@ -2,13 +2,13 @@ module Forsyn
   module Responders
     class ImmediateResponder < Responder
 
-      def receive(checker, level, data)
+      def receive(checker, level, field, data)
         raise ArgumentError unless checker.in?(checkers)
 
         change = classify_change(current_level, level)
 
-        if change != :no_change
-          notify_notifiers(checker, change, data)
+        if current_level != level
+          notify_notifiers(checker, [current_level, level], field, data)
         end
 
         @current_level = level

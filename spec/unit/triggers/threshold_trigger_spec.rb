@@ -1,6 +1,6 @@
-describe Forsyn::Checkers::ThresholdChecker do
+describe Forsyn::Triggers::ThresholdTrigger do
 
-  let(:checker)         { described_class.new('TestChecker', critical: 10, abnormal: 9) }
+  let(:checker)         { described_class.new('Test', critical: 10, abnormal: 9) }
   let(:normal_sample)   { Forsyn::Sample.new(Time.now, 8) }
   let(:critical_sample) { Forsyn::Sample.new(Time.now, 11) }
 
