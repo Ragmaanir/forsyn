@@ -22,8 +22,13 @@ Gem::Specification.new do |s|
   s.test_files   = Dir.glob("spec/**/*_spec.rb")
   s.require_path = 'lib'
 
-  s.add_runtime_dependency 'rack', '~> 1.6'
   s.add_runtime_dependency 'activesupport', '>= 3.2'
+  s.add_runtime_dependency 'eventmachine', '~> 1.0'
+  s.add_runtime_dependency 'em-synchrony', '~> 1.0'
+  s.add_runtime_dependency 'em-http-request', '~> 1.0'
+  s.add_runtime_dependency 'elasticsearch-transport', '~> 1.0'
+  s.add_runtime_dependency 'elasticsearch-api', '~> 1.0'
+  s.add_runtime_dependency 'faraday', '~> 0.9'
 
   s.add_development_dependency "rspec", '~> 3.0'
   s.add_development_dependency 'wrong', '~> 0.7'

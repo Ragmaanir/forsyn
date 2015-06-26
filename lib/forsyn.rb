@@ -1,23 +1,17 @@
 require 'logger'
 require 'active_support'
 require 'active_support/core_ext'
-require 'rack'
+
+require 'eventmachine'
+require 'em-synchrony'
+require 'em-synchrony/em-http'
+require 'elasticsearch-transport'
+require 'elasticsearch/api'
 
 require 'forsyn/version'
+
 require 'forsyn/example_setup'
 require 'forsyn/alert_state'
-require 'forsyn/sample'
-require 'forsyn/trigger'
-require 'forsyn/triggers/threshold_based'
-require 'forsyn/triggers/threshold_trigger'
-require 'forsyn/triggers/deviation_trigger'
-require 'forsyn/responder'
-require 'forsyn/responders/immediate_responder'
-require 'forsyn/responders/stateful_responder'
-require 'forsyn/notifier'
-require 'forsyn/notifiers/terminal_notifier'
-#require 'forsyn/has_inputs'
-#require 'forsyn/has_output'
 
 require 'forsyn/streams/stream'
 require 'forsyn/streams/filter'
@@ -26,6 +20,12 @@ require 'forsyn/streams/rate_limiter'
 require 'forsyn/streams/change_detector'
 require 'forsyn/streams/printer'
 require 'forsyn/streams/sink'
+
+require 'forsyn/buffered_dispatcher'
+
+require 'forsyn/event_backends/backend'
+require 'forsyn/event_backends/elasticsearch_backend'
+require 'forsyn/tls_server'
 
 module Forsyn
 
@@ -37,17 +37,6 @@ module Forsyn
     @logger = logger
   end
 
-  # class Endpoint < Goliath::API
-  #   use Goliath::Rack::Params
-
-  #   def response(env)
-  #     params['data'].each do |_,msg|
-  #       p msg
-  #     end
-
-  #     [200, {}, ""]
-  #   end
-  # end
 end
 
 # e = Forsyn::ExampleSetup.new
@@ -68,15 +57,6 @@ end
 #   "free"=>1_892_172_000
 # ))
 
-if !ENV['FORSYN_ENV'] == 'test'
-  app = Proc.new do |env|
-    req = Rack::Request.new(env)
-    req.params['data'].each do |_,msg|
-      p msg
-    end
-
-    ['200', {}, []]
-  end
-
-  Rack::Handler::WEBrick.run app, Port: 10001
+if ENV['FORSYN_ENV'] != 'test'
+  Forsyn::TlsServer.new.run
 end
