@@ -1,5 +1,5 @@
 module Forsyn
-  class TlsServer
+  class Server
 
     class Connection < EventMachine::Connection
 

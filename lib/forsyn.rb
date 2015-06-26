@@ -25,7 +25,7 @@ require 'forsyn/buffered_dispatcher'
 
 require 'forsyn/event_backends/backend'
 require 'forsyn/event_backends/elasticsearch_backend'
-require 'forsyn/tls_server'
+require 'forsyn/server'
 
 module Forsyn
 
@@ -58,5 +58,5 @@ end
 # ))
 
 if ENV['FORSYN_ENV'] != 'test'
-  Forsyn::TlsServer.new.run
+  Forsyn::Server.new.run
 end
