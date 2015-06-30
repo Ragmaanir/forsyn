@@ -10,6 +10,8 @@ require 'elasticsearch/api'
 
 require 'forsyn/version'
 
+require 'forsyn/configuration'
+
 require 'forsyn/example_setup'
 require 'forsyn/alert_state'
 
@@ -25,16 +27,23 @@ require 'forsyn/buffered_dispatcher'
 
 require 'forsyn/event_backends/backend'
 require 'forsyn/event_backends/elasticsearch_backend'
+require 'forsyn/connection'
 require 'forsyn/server'
 
 module Forsyn
 
-  mattr_reader :logger
+  def self.configure
+    @configuration = Configuration.new
+    yield @configuration if block_given?
+    @configuration.finalize!
+  end
 
-  @@logger = Logger.new(STDOUT)
+  def self.configuration
+    @configuration || configure
+  end
 
-  def initialize(logger: Logger.new(STDOUT))
-    @logger = logger
+  def self.logger
+    configuration.logger
   end
 
 end

@@ -52,6 +52,7 @@ module Forsyn
     def dispatch(buffer)
       @on_dispatch.call(buffer)
     end
+
   end
 
 end
