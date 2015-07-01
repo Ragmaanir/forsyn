@@ -27,6 +27,8 @@ require 'forsyn/buffered_dispatcher'
 
 require 'forsyn/event_backends/backend'
 require 'forsyn/event_backends/elasticsearch_backend'
+
+require 'forsyn/windowed_counter'
 require 'forsyn/connection'
 require 'forsyn/server'
 

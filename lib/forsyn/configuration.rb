@@ -29,7 +29,7 @@ module Forsyn
     attribute :logger, Object, default: Logger.new(STDOUT)
 
     def finalize!
-      #@finalized = true
+      validate! # required to validate default values
       freeze
     end
 

@@ -17,6 +17,8 @@ module Forsyn
       @dispatcher = BufferedDispatcher.new(@event_queue) do |events|
         @event_backend.store(events)
       end
+
+      @request_counter = WindowedCounter.new
     end
 
     def run
@@ -30,7 +32,10 @@ module Forsyn
         @dispatcher.run
 
         EventMachine.start_server(@host, @port, Connection) do |conn|
-          conn.configure(event_queue: @event_queue)
+          conn.configure(
+            event_queue: @event_queue,
+            request_counter: @request_counter
+          )
         end
 
         logger.info "Started"
