@@ -1,26 +1,29 @@
 = forsyn
 
-* FIX (url)
+* https://github.com/Ragmaanir/forsyn
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Is used for monitoring and alerting. Is meant to replace nagios. Is similar to riemann.
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* Incomplete
+* Not production ready
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  TODO
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* eventmachine
+* elasticsearch-ruby
+* activesupport
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* gem install forsyn
 
 == DEVELOPERS:
 
@@ -35,7 +38,7 @@ and generate the RDoc.
 
 (The MIT License)
 
-Copyright (c) 2014 FIX
+Copyright (c) 2014 Ragmaanir
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
