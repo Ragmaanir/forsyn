@@ -1,31 +1,31 @@
-= forsyn
+# forsyn
 
 * https://github.com/Ragmaanir/forsyn
 
-== DESCRIPTION:
+## DESCRIPTION:
 
 Is used for monitoring and alerting. Is meant to replace nagios. Is similar to riemann.
 
-== FEATURES/PROBLEMS:
+## FEATURES/PROBLEMS:
 
 * Incomplete
 * Not production ready
 
-== SYNOPSIS:
+## SYNOPSIS:
 
   TODO
 
-== REQUIREMENTS:
+## REQUIREMENTS:
 
 * eventmachine
 * elasticsearch-ruby
 * activesupport
 
-== INSTALL:
+## INSTALL:
 
 * gem install forsyn
 
-== DEVELOPERS:
+## DEVELOPERS:
 
 After checking out the source, run:
 
@@ -34,7 +34,7 @@ After checking out the source, run:
 This task will install any missing dependencies, run the tests/specs,
 and generate the RDoc.
 
-== LICENSE:
+## LICENSE:
 
 (The MIT License)
 
